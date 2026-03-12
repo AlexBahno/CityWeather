@@ -12,6 +12,12 @@ final class CitiesListCoordinator: BaseCoordinator {
     
     @Published var presentSheetItem: CitiesListDestinationFlowPage?
     @Published var fullCoverItem: CitiesListDestinationFlowPage?
+    
+    let services: Services
+    
+    init(services: Services) {
+        self.services = services
+    }
 }
 
 /// screens protocol define as per navigation required
@@ -32,7 +38,7 @@ enum CitiesListDestinationFlowPage: Hashable, Identifiable {
         return lhs.hashValue == rhs.hashValue
     }
     
-    case main
+    case main(Services)
     case details
     
     var id: String {

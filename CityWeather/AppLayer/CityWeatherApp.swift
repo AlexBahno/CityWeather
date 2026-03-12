@@ -11,12 +11,16 @@ import SwiftUI
 struct CityWeatherApp: App {
     
     @StateObject private var appCoordinator = AppCoordinator()
+    private var services = Services()
     
     var body: some Scene {
         WindowGroup {
             Group {
                 if appCoordinator.hasFinishedOnboarding {
-                    MainTabCoordinatorView()
+                    MainTabCoordinatorView(
+                        tabCoordinator: TabCoordinator(),
+                        services: services
+                    )
                 } else {
                     OnboardingView(appCoordinator: appCoordinator)
                 }

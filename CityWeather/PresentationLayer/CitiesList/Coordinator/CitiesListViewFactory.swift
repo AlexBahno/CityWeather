@@ -12,14 +12,14 @@ class CitiesListViewFactory {
     @ViewBuilder
     static func viewForDestination(_ destination: CitiesListDestinationFlowPage) -> some View {
         switch destination {
-        case .main:
-            getMainView()
+        case .main(let services):
+            getMainView(newtworkService: services.networkService)
         case .details:
             getDetailsView()
         }
     }
     
-    static func getMainView() -> some View {
+    static func getMainView(newtworkService: NetworkProtocol) -> some View {
         let view = EmptyView()
         return view
     }

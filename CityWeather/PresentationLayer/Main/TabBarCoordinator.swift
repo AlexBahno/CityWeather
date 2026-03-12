@@ -13,6 +13,10 @@ class TabCoordinator: ObservableObject {
     @Published var selectedTab: Tab = .citiesList
     
     // Hold references to child coordinators
-    let citiesCoordinator = CitiesListCoordinator()
+    let citiesCoordinator: CitiesListCoordinator
 //    let savedCitiesCoordinator = SavedCitiesCoordinator()
+    
+    init(services: Services) {
+        self.citiesCoordinator = .init(services: services)
+    }
 }
