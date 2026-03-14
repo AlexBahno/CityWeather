@@ -10,4 +10,5 @@ import Foundation
 final class Services {
     
     lazy var networkService: NetworkProtocol = NetworkService()
+    lazy var favouriteCitiesService: FavoritesServiceProtocol = UserDefaultsFavoritesService()
 }

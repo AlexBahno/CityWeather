@@ -10,8 +10,9 @@ import SwiftUI
 struct CityCellView: View {
     
     let city: City
+    let isSaved: Bool
     
-    @State var isSaved: Bool = false
+    let savedAction: () -> Void
     
     var body: some View {
         content
@@ -29,7 +30,7 @@ struct CityCellView: View {
             
             Button {
                 withAnimation {
-                    isSaved.toggle()
+                    savedAction()
                 }
             } label: {
                 Image(systemName: isSaved ? "bookmark.fill" : "bookmark")

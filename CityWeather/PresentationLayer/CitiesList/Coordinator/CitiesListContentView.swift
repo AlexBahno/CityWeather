@@ -32,7 +32,7 @@ struct CitiesListContentView: View {
     
     @ViewBuilder func appContent() -> some View {
         CitiesListViewFactory.getMainView(
-            newtworkService: coordinator.services.networkService
+            services: coordinator.services
         )
     }
 }

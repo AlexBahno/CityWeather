@@ -9,10 +9,13 @@ import SwiftUI
 
 struct CityDetailsView: View {
     
-    let city: City
+    @EnvironmentObject var coordinator: CitiesListCoordinator
+    @ObservedObject var viewModel: CityDetailsViewModel
     @State private var showShareSheet = false
     
-    var onToggleFavorite: () -> Void
+    var city: City {
+        viewModel.city
+    }
     
     var body: some View {
         content
@@ -84,21 +87,23 @@ struct CityDetailsView: View {
     
     var actionButtons: some View {
         HStack(spacing: 16.flexible()) {
-            Button(action: {
-                onToggleFavorite()
-            }) {
+            Button {
+                withAnimation {
+                    viewModel.handleSavedButtonAction()
+                }
+            } label: {
                 Label(
-                    true ? "З обраного" : "В обране",
-                    systemImage: true ? "bookmark.fill" : "bookmark"
+                    viewModel.isFavourite ? "Прибрати" : "Додати",
+                    systemImage: viewModel.isFavourite ? "bookmark.fill" : "bookmark"
                 )
                 .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(true ? .red : .blue)
+            .tint(.blue)
             
-            Button(action: {
-                showShareSheet = true
-            }) {
+            Button {
+                coordinator.showShareSheet(textToShare: viewModel.textToShare)
+            } label: {
                 Label("Поділитись", systemImage: "square.and.arrow.up")
                     .frame(maxWidth: .infinity)
             }

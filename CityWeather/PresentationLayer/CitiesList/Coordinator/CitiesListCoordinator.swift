@@ -23,24 +23,33 @@ final class CitiesListCoordinator: BaseCoordinator {
 
 /// Screens protocol define as per navigation required
 protocol CitiesListNavigator {
+    
     func showDetails(city: City)
+    func showShareSheet(textToShare: String)
 }
 
 /// Extended Base coordinator class with screen added required navigation
 extension CitiesListCoordinator: CitiesListNavigator {
+    
     func showDetails(city: City) {
-        path.append(CitiesListDestinationFlowPage.details(city))
+        path.append(CitiesListDestinationFlowPage.details(city, self.services))
+    }
+    
+    func showShareSheet(textToShare: String) {
+        presentSheetItem = .shareSheet(textToShare)
     }
 }
 
 /// Define enum to identify individualy navigation trigger point
 enum CitiesListDestinationFlowPage: Hashable, Identifiable {
+    
     static func == (lhs: CitiesListDestinationFlowPage, rhs: CitiesListDestinationFlowPage) -> Bool {
         return lhs.hashValue == rhs.hashValue
     }
     
     case main(Services)
-    case details(City)
+    case details(City, Services)
+    case shareSheet(String)
     
     var id: String {
         String(describing: self)
@@ -50,8 +59,10 @@ enum CitiesListDestinationFlowPage: Hashable, Identifiable {
         switch self {
         case .main:
             hasher.combine("main")
-        case .details:
-            hasher.combine("details")
+        case .details(let city, _):
+            hasher.combine(city.name)
+        case .shareSheet(let text):
+            hasher.combine("shareSheet_\(text)")
         }
     }
 }

@@ -21,6 +21,9 @@ struct CitiesListMainView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("Cities")
             .background(.white)
+            .onAppear {
+                viewModel.syncFavorites()
+            }
             .task {
                 if viewModel.cities.isEmpty {
                     await viewModel.fetchData()
@@ -48,35 +51,45 @@ struct CitiesListMainView: View {
                     .padding()
                 }
             case .success:
-                Group {
-                    if viewModel.searchResults.isEmpty {
-                        VStack {
-                            Image(systemName: "magnifyingglass")
-                                .resizable()
-                                .scaledToFill()
-                                .font(.system(size: 32.flexible()))
-                                .frame(width: 32.flexible(), height: 32.flexible())
-                            
-                            Text("There is no city with that name")
-                                .font(.headline)
-                                .foregroundStyle(.text1A1A1A)
-                        }
-                    } else {
-                        List(viewModel.searchResults) { city in
-                            CityCellView(city: city)
-                                .contentShape(Rectangle())
-                                .listRowBackground(Color.clear)
-                                .onTapGesture {
-                                    coordinator.showDetails(city: city)
-                                }
-                        }
-                        .listStyle(.plain)
-                        .scrollContentBackground(.hidden)
-                    }
-                }
-                .searchable(text: $viewModel.searchText, prompt: "Search for the city")
+                successState
             }
         }
         .animation(.easeInOut, value: viewModel.state)
+    }
+    
+    var successState: some View {
+        Group {
+            if viewModel.searchResults.isEmpty {
+                VStack {
+                    Image(systemName: "magnifyingglass")
+                        .resizable()
+                        .scaledToFill()
+                        .font(.system(size: 32.flexible()))
+                        .frame(width: 32.flexible(), height: 32.flexible())
+                    
+                    Text("There is no city with that name")
+                        .font(.headline)
+                        .foregroundStyle(.text1A1A1A)
+                }
+            } else {
+                List(viewModel.searchResults) { city in
+                    CityCellView(
+                        city: city,
+                        isSaved: viewModel.favouritesService.isFavorite(city: city.name)
+                    ) {
+                        viewModel.handleSavedButtonAction(cityName: city.name)
+                    }
+                    .contentShape(Rectangle())
+                    .listRowBackground(Color.clear)
+                    .onTapGesture {
+                        coordinator.showDetails(city: city)
+                    }
+                }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+            }
+        }
+        .animation(.easeInOut, value: viewModel.searchResults)
+        .searchable(text: $viewModel.searchText, prompt: "Search for the city")
     }
 }

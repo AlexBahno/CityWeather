@@ -13,10 +13,13 @@ final class CitiesListViewModel: ObservableObject {
     
     // properties
     let networkService: NetworkProtocol
+    let favouritesService: FavoritesServiceProtocol
     @Published private(set) var state = CitiesListViewState.idle
     @Published private(set) var error: NetworkError?
     @Published private(set) var cities: [City] = []
     @Published var searchText = ""
+    
+    @Published var favoriteCityNames: Set<String> = []
     
     private let defaultCities: [String] = [
         "Kyiv", "Lviv", "Odesa", "Kharkiv", "Dnipro", "Uzhhorod", "Zaporizhzhia", "Vinnytsia"
@@ -39,14 +42,39 @@ final class CitiesListViewModel: ObservableObject {
     }
     
     // MARK: - init
-    init(networkService: NetworkProtocol) {
+    init(
+        networkService: NetworkProtocol,
+        favouritesService: FavoritesServiceProtocol
+    ) {
         self.networkService = networkService
+        self.favouritesService = favouritesService
+        
+        syncFavorites()
     }
     
     func setViewState(stat: CitiesListViewState = .idle) {
         self.state = stat
     }
     
+    func handleSavedButtonAction(cityName: String) {
+        if favouritesService.isFavorite(city: cityName) {
+            favouritesService.removeFavorite(city: cityName)
+            favoriteCityNames.remove(cityName)
+            return
+        }
+        
+        favouritesService.addFavorite(city: cityName)
+        favoriteCityNames.insert(cityName)
+    }
+    
+    func syncFavorites() {
+        let saved = favouritesService.getFavoriteCities()
+        self.favoriteCityNames = Set(saved.map { $0 })
+    }
+}
+
+// MARK: - Network
+extension CitiesListViewModel {
     // Fetching defaultCities
     @MainActor
     func fetchData() async {

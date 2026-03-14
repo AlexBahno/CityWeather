@@ -14,21 +14,36 @@ class CitiesListViewFactory {
     static func viewForDestination(_ destination: CitiesListDestinationFlowPage) -> some View {
         switch destination {
         case .main(let services):
-            getMainView(newtworkService: services.networkService)
-        case .details(let city):
-            getDetailsView(city: city)
+            getMainView(services: services)
+        case .details(let city, let services):
+            getDetailsView(city: city, services.favouriteCitiesService)
+        case .shareSheet(let text):
+            getSheetView(text: text)
         }
     }
     
-    static func getMainView(newtworkService: NetworkProtocol) -> some View {
-        let viewModel = CitiesListViewModel(networkService: newtworkService)
+    static func getMainView(services: Services) -> some View {
+        let viewModel = CitiesListViewModel(
+            networkService: services.networkService,
+            favouritesService: services.favouriteCitiesService
+        )
         let view = CitiesListMainView(viewModel: viewModel)
         return view
     }
-    static func getDetailsView(city: City) -> some View {
-        let view = CityDetailsView(city: city, onToggleFavorite: {
-            
-        })
+    
+    static func getDetailsView(
+        city: City,
+        _ favouriteService: FavoritesServiceProtocol
+    ) -> some View {
+        let viewModel = CityDetailsViewModel(
+            city: city, favouritesService: favouriteService
+        )
+        let view = CityDetailsView(viewModel: viewModel)
+        return view
+    }
+    
+    static func getSheetView(text: String) -> some View {
+        let view = ShareWeatherSheet(shareText: text)
         return view
     }
 }
