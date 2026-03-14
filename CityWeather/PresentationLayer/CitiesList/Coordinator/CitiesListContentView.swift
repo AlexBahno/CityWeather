@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Starter view for Cities List Flow
 struct CitiesListContentView: View {
     
     @ObservedObject var coordinator: CitiesListCoordinator

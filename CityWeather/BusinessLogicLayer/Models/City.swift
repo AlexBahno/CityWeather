@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Welcome
+// MARK: - City
 struct City: Codable, Identifiable, Equatable {
     let id: Int
     private let weather: [Weather]

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Constants for AppStorage/UserDefaults
 struct AppStorageConstants {
     
     static let isOnBoardingFinishedKey = "isOnBoardingFinished"

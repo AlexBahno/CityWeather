@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// Factory for views in CitiesList Flow
 class CitiesListViewFactory {
     @ViewBuilder
     static func viewForDestination(_ destination: CitiesListDestinationFlowPage) -> some View {

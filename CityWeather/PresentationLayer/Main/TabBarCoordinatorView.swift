@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// View of TabBar
 struct MainTabCoordinatorView: View {
     
     @ObservedObject var tabCoordinator: TabCoordinator

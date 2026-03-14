@@ -7,6 +7,7 @@
 
 import Foundation
 
+// helps to parse response to model
 class Parser<Model: Decodable> {
 
     private let decoder: JSONDecoder = JSONDecoder()

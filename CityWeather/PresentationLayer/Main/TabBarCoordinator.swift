@@ -7,6 +7,7 @@
 
 import Combine
 
+/// Coordinator for TabBar
 class TabCoordinator: ObservableObject {
     enum Tab { case citiesList, savedCities }
     
@@ -14,7 +15,6 @@ class TabCoordinator: ObservableObject {
     
     // Hold references to child coordinators
     let citiesCoordinator: CitiesListCoordinator
-//    let savedCitiesCoordinator = SavedCitiesCoordinator()
     
     init(services: Services) {
         self.citiesCoordinator = .init(services: services)

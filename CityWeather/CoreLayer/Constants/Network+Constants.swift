@@ -7,7 +7,9 @@
 
 import Foundation
 
+/// Constants for Network
 struct NetworkConstants {
+    
     static let baseURL = "https://api.openweathermap.org/data/2.5/weather"
     static let baseImgURL = "https://openweathermap.org/payload/api/media/file/"
     static let apiKey = "744b6c45a815091ad9ff2bcf07667859"

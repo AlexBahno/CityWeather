@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+// MARK: - Main Coordinator for App
 class AppCoordinator: ObservableObject {
     @AppStorage(AppStorageConstants.isOnBoardingFinishedKey) var hasFinishedOnboarding: Bool = false
     

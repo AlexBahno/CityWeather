@@ -11,6 +11,7 @@ import Alamofire
 
 final class CitiesListViewModel: ObservableObject {
     
+    // properties
     let networkService: NetworkProtocol
     @Published private(set) var state = CitiesListViewState.idle
     @Published private(set) var error: NetworkError?
@@ -21,6 +22,7 @@ final class CitiesListViewModel: ObservableObject {
         "Kyiv", "Lviv", "Odesa", "Kharkiv", "Dnipro", "Uzhhorod", "Zaporizhzhia", "Vinnytsia"
     ]
     
+    // MARK: - View states
     enum CitiesListViewState: Equatable {
         case idle
         case loading
@@ -36,6 +38,7 @@ final class CitiesListViewModel: ObservableObject {
         }
     }
     
+    // MARK: - init
     init(networkService: NetworkProtocol) {
         self.networkService = networkService
     }
@@ -44,6 +47,7 @@ final class CitiesListViewModel: ObservableObject {
         self.state = stat
     }
     
+    // Fetching defaultCities
     @MainActor
     func fetchData() async {
         setViewState(stat: .loading)
@@ -84,6 +88,7 @@ final class CitiesListViewModel: ObservableObject {
         }
     }
     
+    // Fetch single city from api
     private func fetchSingleCityAsync(request: Request) async throws -> City {
         try await withCheckedThrowingContinuation { continuation in
             networkService.executeWithCodable(request: request, parser: Parser<City>()) { result in

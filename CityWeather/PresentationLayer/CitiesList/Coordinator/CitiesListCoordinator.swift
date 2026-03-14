@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 
+/// Coordinator for Cities List Flow
 final class CitiesListCoordinator: BaseCoordinator {
     
     @Published var presentSheetItem: CitiesListDestinationFlowPage?
@@ -20,7 +21,7 @@ final class CitiesListCoordinator: BaseCoordinator {
     }
 }
 
-/// screens protocol define as per navigation required
+/// Screens protocol define as per navigation required
 protocol CitiesListNavigator {
     func showDetails()
 }
@@ -46,7 +47,6 @@ enum CitiesListDestinationFlowPage: Hashable, Identifiable {
     }
     
     func hash(into hasher: inout Hasher) {
-        // Hashing logic based on the enum case
         switch self {
         case .main:
             hasher.combine("main")

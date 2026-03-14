@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 
+// MARK: - Custom Network Error
 enum NetworkError: LocalizedError {
     case network(AFError)
     case parser
@@ -45,8 +46,6 @@ enum NetworkError: LocalizedError {
             return false
         }
     }
-    
-    // MARK: - LocalizedError
     
     var errorDescription: String? {
         switch self {

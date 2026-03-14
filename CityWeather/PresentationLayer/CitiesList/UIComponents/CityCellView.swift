@@ -33,9 +33,10 @@ struct CityCellView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
         } placeholder: {
-            RoundedRectangle(cornerRadius: 16.flexible())
+            RoundedRectangle(cornerRadius: 8.flexible())
                 .fill(Color.gray9E9E9E)
-                .opacity(0.3)
+                .opacity(0.4)
+                .shimmer()
         }
         .frame(width: 48.flexible(), height: 48.flexible())
     }
