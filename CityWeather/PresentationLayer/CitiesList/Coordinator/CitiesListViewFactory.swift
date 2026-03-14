@@ -20,7 +20,8 @@ class CitiesListViewFactory {
     }
     
     static func getMainView(newtworkService: NetworkProtocol) -> some View {
-        let view = EmptyView()
+        let viewModel = CitiesListViewModel(networkService: newtworkService)
+        let view = CitiesListMainView(viewModel: viewModel)
         return view
     }
     static func getDetailsView() -> some View {

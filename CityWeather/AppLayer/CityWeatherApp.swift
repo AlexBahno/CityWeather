@@ -18,8 +18,7 @@ struct CityWeatherApp: App {
             Group {
                 if appCoordinator.hasFinishedOnboarding {
                     MainTabCoordinatorView(
-                        tabCoordinator: TabCoordinator(),
-                        services: services
+                        tabCoordinator: TabCoordinator(services: services)
                     )
                 } else {
                     OnboardingView(appCoordinator: appCoordinator)
