@@ -23,13 +23,13 @@ final class CitiesListCoordinator: BaseCoordinator {
 
 /// Screens protocol define as per navigation required
 protocol CitiesListNavigator {
-    func showDetails()
+    func showDetails(city: City)
 }
 
 /// Extended Base coordinator class with screen added required navigation
 extension CitiesListCoordinator: CitiesListNavigator {
-    func showDetails() {
-        path.append(CitiesListDestinationFlowPage.details)
+    func showDetails(city: City) {
+        path.append(CitiesListDestinationFlowPage.details(city))
     }
 }
 
@@ -40,7 +40,7 @@ enum CitiesListDestinationFlowPage: Hashable, Identifiable {
     }
     
     case main(Services)
-    case details
+    case details(City)
     
     var id: String {
         String(describing: self)

@@ -15,8 +15,8 @@ class CitiesListViewFactory {
         switch destination {
         case .main(let services):
             getMainView(newtworkService: services.networkService)
-        case .details:
-            getDetailsView()
+        case .details(let city):
+            getDetailsView(city: city)
         }
     }
     
@@ -25,8 +25,10 @@ class CitiesListViewFactory {
         let view = CitiesListMainView(viewModel: viewModel)
         return view
     }
-    static func getDetailsView() -> some View {
-        let view = EmptyView()
+    static func getDetailsView(city: City) -> some View {
+        let view = CityDetailsView(city: city, onToggleFavorite: {
+            
+        })
         return view
     }
 }

@@ -43,7 +43,8 @@ struct Main: Codable {
 // MARK: - Weather
 struct Weather: Codable {
     let id: Int
-    let main, description, icon: String
+    let main, icon: String
+    private let description: String
     
     var uppercasedDescription: String {
         let capitalLetter = description.prefix(1).uppercased()

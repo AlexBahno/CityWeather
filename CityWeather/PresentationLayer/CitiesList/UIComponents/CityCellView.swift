@@ -11,6 +11,8 @@ struct CityCellView: View {
     
     let city: City
     
+    @State var isSaved: Bool = false
+    
     var body: some View {
         content
             .padding(.vertical, 8.flexible())
@@ -24,6 +26,19 @@ struct CityCellView: View {
             description
             
             Spacer()
+            
+            Button {
+                withAnimation {
+                    isSaved.toggle()
+                }
+            } label: {
+                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .foregroundStyle(.yellow)
+                    .frame(width: 24.flexible(), height: 24.flexible())
+            }
+            .buttonStyle(.plain)
         }
     }
     

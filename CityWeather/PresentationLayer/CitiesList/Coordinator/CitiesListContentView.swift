@@ -22,7 +22,6 @@ struct CitiesListContentView: View {
                     .fullScreenCover(item: $coordinator.fullCoverItem) { present in
                         CitiesListViewFactory.viewForDestination(present)
                     }
-                
             }
             .navigationDestination(for: CitiesListDestinationFlowPage.self) { destination in
                 CitiesListViewFactory.viewForDestination(destination)

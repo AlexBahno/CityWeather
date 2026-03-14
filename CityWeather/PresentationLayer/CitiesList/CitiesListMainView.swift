@@ -10,7 +10,11 @@ import SwiftUI
 struct CitiesListMainView: View {
     
     @EnvironmentObject var coordinator: CitiesListCoordinator
-    @ObservedObject var viewModel: CitiesListViewModel
+    @StateObject var viewModel: CitiesListViewModel
+    
+    init(viewModel: CitiesListViewModel) {
+        self._viewModel = .init(wrappedValue: viewModel)
+    }
     
     var body: some View {
         content
@@ -60,7 +64,11 @@ struct CitiesListMainView: View {
                     } else {
                         List(viewModel.searchResults) { city in
                             CityCellView(city: city)
+                                .contentShape(Rectangle())
                                 .listRowBackground(Color.clear)
+                                .onTapGesture {
+                                    coordinator.showDetails(city: city)
+                                }
                         }
                         .listStyle(.plain)
                         .scrollContentBackground(.hidden)
