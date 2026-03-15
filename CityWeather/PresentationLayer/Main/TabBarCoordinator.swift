@@ -15,8 +15,10 @@ class TabCoordinator: ObservableObject {
     
     // Hold references to child coordinators
     let citiesCoordinator: CitiesListCoordinator
+    let savedCitiesCoordnitaor: SavedCitiesCoordinator
     
     init(services: Services) {
         self.citiesCoordinator = .init(services: services)
+        self.savedCitiesCoordnitaor = .init(services: services)
     }
 }

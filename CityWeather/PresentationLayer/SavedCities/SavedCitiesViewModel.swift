@@ -1,48 +1,34 @@
 //
-//  CitiesListViewModel.swift
+//  SavedCitiesViewModel.swift
 //  CityWeather
 //
-//  Created by Alexandr Bahno on 13.03.2026.
+//  Created by Alexandr Bahno on 15.03.2026.
 //
 
-import Foundation
 import Combine
 import Alamofire
 
-struct CitiesListRouter {
-    let showCityDetails: (City) -> Void
+struct SavedCitiesRouter {
+    let showDetails: (City) -> Void
 }
 
-final class CitiesListViewModel: ObservableObject {
+final class SavedCitiesViewModel: ObservableObject {
     
     // properties
     let networkService: NetworkProtocol
     let favouritesService: FavoritesServiceProtocol
-    let router: CitiesListRouter
+    let router: SavedCitiesRouter
     @Published private(set) var state = ViewState.idle
     @Published private(set) var error: NetworkError?
+    
     @Published private(set) var cities: [City] = []
-    @Published var searchText = ""
-    
     @Published var favouriteCityNames: Set<String> = []
-    
-    private let defaultCities: [String] = [
-        "Kyiv", "Lviv", "Odesa", "Kharkiv", "Dnipro", "Uzhhorod", "Zaporizhzhia", "Vinnytsia"
-    ]
-    
-    var searchResults: [City] {
-        if searchText.isEmpty {
-            return cities
-        } else {
-            return cities.filter { $0.name.containsCharactersInOrder(of: searchText) }
-        }
-    }
     
     // MARK: - init
     init(
         networkService: NetworkProtocol,
         favouritesService: FavoritesServiceProtocol,
-        router: CitiesListRouter
+        router: SavedCitiesRouter
     ) {
         self.networkService = networkService
         self.favouritesService = favouritesService
@@ -55,17 +41,6 @@ final class CitiesListViewModel: ObservableObject {
         self.state = stat
     }
     
-    func handleSavedButtonAction(cityName: String) {
-        if favouritesService.isFavorite(city: cityName) {
-            favouritesService.removeFavorite(city: cityName)
-            favouriteCityNames.remove(cityName)
-            return
-        }
-        
-        favouritesService.addFavorite(city: cityName)
-        favouriteCityNames.insert(cityName)
-    }
-    
     func syncFavorites() {
         let saved = favouritesService.getFavoriteCities()
         self.favouriteCityNames = Set(saved.map { $0 })
@@ -73,17 +48,17 @@ final class CitiesListViewModel: ObservableObject {
 }
 
 // MARK: - Network
-extension CitiesListViewModel {
-    // Fetching defaultCities
+extension SavedCitiesViewModel {
+    // Fetching favouriteCities
     @MainActor
     func fetchData() async {
         setViewState(stat: .loading)
         
-        try? await Task.sleep(nanoseconds: 700_000_000)
+        try? await Task.sleep(nanoseconds: 500_000_000)
         
         do {
             let fetchedCities = try await withThrowingTaskGroup(of: City.self) { group in
-                defaultCities.map {
+                favouriteCityNames.map {
                     Request(
                         path: "",
                         method: .get,

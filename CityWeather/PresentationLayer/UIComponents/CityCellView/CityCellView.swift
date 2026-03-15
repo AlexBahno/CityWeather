@@ -12,7 +12,7 @@ struct CityCellView: View {
     let city: City
     let isSaved: Bool
     
-    let savedAction: () -> Void
+    var savedAction: (() -> Void)?
     
     var body: some View {
         content
@@ -28,18 +28,20 @@ struct CityCellView: View {
             
             Spacer()
             
-            Button {
-                withAnimation {
-                    savedAction()
+            if let savedAction {
+                Button {
+                    withAnimation {
+                        savedAction()
+                    }
+                } label: {
+                    Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .foregroundStyle(.yellow)
+                        .frame(width: 24.flexible(), height: 24.flexible())
                 }
-            } label: {
-                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .foregroundStyle(.yellow)
-                    .frame(width: 24.flexible(), height: 24.flexible())
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
         }
     }
     

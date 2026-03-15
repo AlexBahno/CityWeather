@@ -21,20 +21,11 @@ struct MainTabCoordinatorView: View {
                 }
                 .tag(TabCoordinator.Tab.citiesList)
             
-            EmptyView()
-                .tabItem {
-                    Label("Saved", systemImage: "star.fill")
-                }
-                .tag(TabCoordinator.Tab.savedCities)
-            
-            // Tab 2: Saved Cities
-//            NavigationStack(path: $tabCoordinator.savedCitiesCoordinator.path) {
-//                SavedCitiesView(coordinator: tabCoordinator.savedCitiesCoordinator)
-//            }
-//            .tabItem {
-//                Label("Saved", systemImage: "star.fill")
-//            }
-//            .tag(TabCoordinator.Tab.savedCities)
+            SavedCitiesContentView(coordinator: tabCoordinator.savedCitiesCoordnitaor)
+            .tabItem {
+                Label("Saved", systemImage: "star.fill")
+            }
+            .tag(TabCoordinator.Tab.savedCities)
         }
     }
 }

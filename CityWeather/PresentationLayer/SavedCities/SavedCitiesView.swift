@@ -1,32 +1,30 @@
 //
-//  CitiesListMainView.swift
+//  SavedCitiesView.swift
 //  CityWeather
 //
-//  Created by Alexandr Bahno on 13.03.2026.
+//  Created by Alexandr Bahno on 15.03.2026.
 //
 
 import SwiftUI
 
-struct CitiesListMainView: View {
+struct SavedCitiesView: View {
     
-    @StateObject var viewModel: CitiesListViewModel
+    @StateObject var viewModel: SavedCitiesViewModel
     
-    init(viewModel: CitiesListViewModel) {
+    init(viewModel: SavedCitiesViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
     
     var body: some View {
         content
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .navigationTitle("Міста")
+            .navigationTitle("Збережені")
             .background(.white)
             .onAppear {
                 viewModel.syncFavorites()
             }
             .task {
-                if viewModel.cities.isEmpty {
-                    await viewModel.fetchData()
-                }
+                await viewModel.fetchData()
             }
     }
     
@@ -58,7 +56,7 @@ struct CitiesListMainView: View {
     
     var successState: some View {
         Group {
-            if viewModel.searchResults.isEmpty {
+            if viewModel.cities.isEmpty {
                 VStack {
                     Image(systemName: "magnifyingglass")
                         .resizable()
@@ -71,24 +69,21 @@ struct CitiesListMainView: View {
                         .foregroundStyle(.text1A1A1A)
                 }
             } else {
-                List(viewModel.searchResults) { city in
+                List(viewModel.cities) { city in
                     CityCellView(
                         city: city,
                         isSaved: viewModel.favouritesService.isFavorite(city: city.name)
-                    ) {
-                        viewModel.handleSavedButtonAction(cityName: city.name)
-                    }
+                    )
                     .contentShape(Rectangle())
                     .listRowBackground(Color.clear)
                     .onTapGesture {
-                        viewModel.router.showCityDetails(city)
+                        viewModel.router.showDetails(city)
                     }
                 }
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
             }
         }
-        .animation(.easeInOut, value: viewModel.searchResults)
-        .searchable(text: $viewModel.searchText, prompt: "Шукати місто")
+        .animation(.easeInOut, value: viewModel.cities)
     }
 }

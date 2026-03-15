@@ -1,19 +1,19 @@
 //
-//  CitiesListContentView.swift
+//  SavedCitiesContentView.swift
 //  CityWeather
 //
-//  Created by Alexandr Bahno on 12.03.2026.
+//  Created by Alexandr Bahno on 15.03.2026.
 //
 
 import SwiftUI
 
-/// Starter view for Cities List Flow
-struct CitiesListContentView: View {
+/// Starter view for Saved CIties Flow
+struct SavedCitiesContentView: View {
     
-    @ObservedObject var coordinator: CitiesListCoordinator
-    @StateObject var factory: CitiesListViewFactory
+    @ObservedObject var coordinator: SavedCitiesCoordinator
+    @StateObject var factory: SavedCitiesViewFactory
     
-    init(coordinator: CitiesListCoordinator) {
+    init(coordinator: SavedCitiesCoordinator) {
         self.coordinator = coordinator
         self._factory = .init(wrappedValue: .init(coordinator: coordinator))
     }
@@ -29,7 +29,7 @@ struct CitiesListContentView: View {
                         factory.viewForDestination(present)
                     }
             }
-            .navigationDestination(for: CitiesListDestinationFlowPage.self) { destination in
+            .navigationDestination(for: SavedCitiesDestinationFlowPage.self) { destination in
                 factory.viewForDestination(destination)
             }
         }

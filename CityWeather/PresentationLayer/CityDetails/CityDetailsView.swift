@@ -9,9 +9,7 @@ import SwiftUI
 
 struct CityDetailsView: View {
     
-    @EnvironmentObject var coordinator: CitiesListCoordinator
     @ObservedObject var viewModel: CityDetailsViewModel
-    @State private var showShareSheet = false
     
     var city: City {
         viewModel.city
@@ -102,7 +100,7 @@ struct CityDetailsView: View {
             .tint(.blue)
             
             Button {
-                coordinator.showShareSheet(textToShare: viewModel.textToShare)
+                viewModel.showSheet()
             } label: {
                 Label("Поділитись", systemImage: "square.and.arrow.up")
                     .frame(maxWidth: .infinity)

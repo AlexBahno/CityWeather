@@ -7,23 +7,30 @@
 
 import Combine
 
+struct CityDetailsRouter {
+    let showShareSheet: (String) -> Void
+}
+
 final class CityDetailsViewModel: ObservableObject {
     
     let city: City
-    
-    // Стан саме для UI цього екрану
-    @Published var isFavourite: Bool = false
-    
-    // Посилання на наш глобальний сервіс
+    let router: CityDetailsRouter
     private let favouritesService: FavoritesServiceProtocol
+    
+    @Published var isFavourite: Bool = false
     
     var textToShare: String {
         return "Погода в \(city.name): \(Int(city.main.temp))°C, \(city.primaryWeather.uppercasedDescription)"
     }
     
-    init(city: City, favouritesService: FavoritesServiceProtocol) {
+    init(
+        city: City,
+        favouritesService: FavoritesServiceProtocol,
+        router: CityDetailsRouter
+    ) {
         self.city = city
         self.favouritesService = favouritesService
+        self.router = router
         
         self.isFavourite = favouritesService.isFavorite(city: city.name)
     }
@@ -37,5 +44,9 @@ final class CityDetailsViewModel: ObservableObject {
         
         favouritesService.addFavorite(city: city.name)
         isFavourite = true
+    }
+    
+    func showSheet() {
+        router.showShareSheet(textToShare)
     }
 }
