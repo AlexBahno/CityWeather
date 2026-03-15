@@ -34,56 +34,63 @@ struct SavedCitiesView: View {
             case .loading, .idle:
                 ProgressView("Завантажується...")
             case .failed:
-                VStack {
-                    Text("Щось пішло не так")
-                        .font(.headline)
-                    Text(viewModel.error?.localizedDescription ?? "Виникла невідома помилка")
-                        .foregroundColor(.secondary)
-                    
-                    Button("Спробувати ще раз") {
+                FailedStateView(
+                    mainText: "Щось пішло не так",
+                    description: viewModel.error?.localizedDescription ?? "Виникла невідома помилка") {
                         Task {
                             await viewModel.fetchData()
                         }
                     }
-                    .padding()
-                }
             case .success:
                 successState
+                    .animation(.easeInOut, value: viewModel.cities)
             }
         }
         .animation(.easeInOut, value: viewModel.state)
     }
     
+    @ViewBuilder
     var successState: some View {
-        Group {
-            if viewModel.cities.isEmpty {
-                VStack {
-                    Image(systemName: "magnifyingglass")
-                        .resizable()
-                        .scaledToFill()
-                        .font(.system(size: 32.flexible()))
-                        .frame(width: 32.flexible(), height: 32.flexible())
-                    
-                    Text("У списку немає міста з такою назвою")
-                        .font(.headline)
-                        .foregroundStyle(.text1A1A1A)
-                }
-            } else {
-                List(viewModel.cities) { city in
-                    CityCellView(
-                        city: city,
-                        isSaved: viewModel.favouritesService.isFavorite(city: city.name)
-                    )
-                    .contentShape(Rectangle())
-                    .listRowBackground(Color.clear)
-                    .onTapGesture {
-                        viewModel.router.showDetails(city)
+        if viewModel.cities.isEmpty {
+            VStack(spacing: 16.flexible()) {
+                Image(systemName: "bookmark")
+                    .resizable()
+                    .scaledToFill()
+                    .font(.system(size: 32.flexible()))
+                    .frame(width: 32.flexible(), height: 32.flexible())
+                
+                Text("Списко поки що порожній")
+                    .font(.headline)
+                    .foregroundStyle(.text1A1A1A)
+            }
+        } else {
+            listView
+        }
+    }
+    
+    var listView: some View {
+        List(viewModel.cities) { city in
+            CityCellView(
+                city: city,
+                isSaved: viewModel.favouritesService.isFavorite(city: city.name)
+            )
+            .contentShape(Rectangle())
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                DeleteSwipeView {
+                    withAnimation {
+                        viewModel.deleteFromSaved(city: city)
                     }
                 }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
+            }
+            .listRowBackground(Color.clear)
+            .onTapGesture {
+                viewModel.router.showDetails(city)
             }
         }
-        .animation(.easeInOut, value: viewModel.cities)
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .refreshable {
+            await viewModel.fetchData()
+        }
     }
 }

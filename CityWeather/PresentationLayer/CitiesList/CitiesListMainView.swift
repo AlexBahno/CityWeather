@@ -36,59 +36,59 @@ struct CitiesListMainView: View {
             case .loading, .idle:
                 ProgressView("Завантажується...")
             case .failed:
-                VStack {
-                    Text("Щось пішло не так")
-                        .font(.headline)
-                    Text(viewModel.error?.localizedDescription ?? "Виникла невідома помилка")
-                        .foregroundColor(.secondary)
-                    
-                    Button("Спробувати ще раз") {
+                FailedStateView(
+                    mainText: "Щось пішло не так",
+                    description: viewModel.error?.localizedDescription ?? "Виникла невідома помилка") {
                         Task {
                             await viewModel.fetchData()
                         }
                     }
-                    .padding()
-                }
             case .success:
                 successState
+                    .animation(.easeInOut, value: viewModel.searchResults)
+                    .searchable(text: $viewModel.searchText, prompt: "Шукати місто")
             }
         }
         .animation(.easeInOut, value: viewModel.state)
     }
     
+    @ViewBuilder
     var successState: some View {
-        Group {
-            if viewModel.searchResults.isEmpty {
-                VStack {
-                    Image(systemName: "magnifyingglass")
-                        .resizable()
-                        .scaledToFill()
-                        .font(.system(size: 32.flexible()))
-                        .frame(width: 32.flexible(), height: 32.flexible())
-                    
-                    Text("У списку немає міста з такою назвою")
-                        .font(.headline)
-                        .foregroundStyle(.text1A1A1A)
-                }
-            } else {
-                List(viewModel.searchResults) { city in
-                    CityCellView(
-                        city: city,
-                        isSaved: viewModel.favouritesService.isFavorite(city: city.name)
-                    ) {
-                        viewModel.handleSavedButtonAction(cityName: city.name)
-                    }
-                    .contentShape(Rectangle())
-                    .listRowBackground(Color.clear)
-                    .onTapGesture {
-                        viewModel.router.showCityDetails(city)
-                    }
-                }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
+        if viewModel.searchResults.isEmpty {
+            VStack(spacing: 16.flexible()) {
+                Image(systemName: "magnifyingglass")
+                    .resizable()
+                    .scaledToFill()
+                    .font(.system(size: 32.flexible()))
+                    .frame(width: 32.flexible(), height: 32.flexible())
+                
+                Text("У списку немає міста з такою назвою")
+                    .font(.headline)
+                    .foregroundStyle(.text1A1A1A)
+            }
+        } else {
+            listView
+        }
+    }
+    
+    var listView: some View {
+        List(viewModel.searchResults) { city in
+            CityCellView(
+                city: city,
+                isSaved: viewModel.favouritesService.isFavorite(city: city.name)
+            ) {
+                viewModel.handleSavedButtonAction(cityName: city.name)
+            }
+            .contentShape(Rectangle())
+            .listRowBackground(Color.clear)
+            .onTapGesture {
+                viewModel.router.showCityDetails(city)
             }
         }
-        .animation(.easeInOut, value: viewModel.searchResults)
-        .searchable(text: $viewModel.searchText, prompt: "Шукати місто")
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .refreshable {
+            await viewModel.fetchData()
+        }
     }
 }

@@ -45,6 +45,13 @@ final class SavedCitiesViewModel: ObservableObject {
         let saved = favouritesService.getFavoriteCities()
         self.favouriteCityNames = Set(saved.map { $0 })
     }
+    
+    func deleteFromSaved(city: City) {
+        favouritesService.removeFavorite(city: city.name)
+        cities.removeAll(where: { $0.id == city.id })
+        
+        syncFavorites()
+    }
 }
 
 // MARK: - Network
