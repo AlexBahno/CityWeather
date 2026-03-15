@@ -72,7 +72,7 @@ struct SavedCitiesView: View {
         List(viewModel.cities) { city in
             CityCellView(
                 city: city,
-                isSaved: viewModel.favouritesService.isFavorite(city: city.name)
+                isSaved: viewModel.isCitySaved(cityName: city.name)
             )
             .contentShape(Rectangle())
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
@@ -84,7 +84,7 @@ struct SavedCitiesView: View {
             }
             .listRowBackground(Color.clear)
             .onTapGesture {
-                viewModel.router.showDetails(city)
+                viewModel.showDetailsView(for: city)
             }
         }
         .listStyle(.plain)

@@ -15,7 +15,7 @@ final class CityDetailsViewModel: ObservableObject {
     
     // properties
     let city: City
-    let router: CityDetailsRouter
+    private let router: CityDetailsRouter
     private let favouritesService: FavoritesServiceProtocol
     
     @Published var isFavourite: Bool = false

@@ -16,7 +16,7 @@ struct CitiesListRouter {
 final class CitiesListViewModel: ObservableObject {
     
     // properties
-    let router: CitiesListRouter
+    private let router: CitiesListRouter
     private let networkService: NetworkProtocol
     private let favouritesService: FavoritesServiceProtocol
     
@@ -69,6 +69,10 @@ final class CitiesListViewModel: ObservableObject {
     func syncFavorites() {
         let saved = favouritesService.getFavoriteCities()
         self.favouriteCityNames = Set(saved.map { $0 })
+    }
+    
+    func showDetailsView(for city: City) {
+        router.showCityDetails(city)
     }
     
     func isCitySaved(cityName: String) -> Bool {

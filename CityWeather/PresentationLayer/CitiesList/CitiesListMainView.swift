@@ -82,7 +82,7 @@ struct CitiesListMainView: View {
             .contentShape(Rectangle())
             .listRowBackground(Color.clear)
             .onTapGesture {
-                viewModel.router.showCityDetails(city)
+                viewModel.showDetailsView(for: city)
             }
         }
         .listStyle(.plain)

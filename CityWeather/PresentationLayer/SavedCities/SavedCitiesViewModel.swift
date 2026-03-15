@@ -15,14 +15,14 @@ struct SavedCitiesRouter {
 final class SavedCitiesViewModel: ObservableObject {
     
     // properties
-    let networkService: NetworkProtocol
-    let favouritesService: FavoritesServiceProtocol
-    let router: SavedCitiesRouter
+    private let networkService: NetworkProtocol
+    private let favouritesService: FavoritesServiceProtocol
+    private let router: SavedCitiesRouter
+    
+    @Published var favouriteCityNames: Set<String> = []
     @Published private(set) var state = ViewState.idle
     @Published private(set) var error: NetworkError?
-    
     @Published private(set) var cities: [City] = []
-    @Published var favouriteCityNames: Set<String> = []
     
     // MARK: - init
     init(
@@ -51,6 +51,14 @@ final class SavedCitiesViewModel: ObservableObject {
         cities.removeAll(where: { $0.id == city.id })
         
         syncFavorites()
+    }
+    
+    func showDetailsView(for city: City) {
+        router.showDetails(city)
+    }
+    
+    func isCitySaved(cityName: String) -> Bool {
+        favouritesService.isFavorite(city: cityName)
     }
 }
 
