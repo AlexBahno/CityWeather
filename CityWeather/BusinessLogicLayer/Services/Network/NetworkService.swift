@@ -11,41 +11,48 @@ import Alamofire
 // MARK: - NetworkProtocol
 protocol NetworkProtocol {
     
-    func executeWithCodable<Model>(
+    func executeWithCodable<Model: Codable>(
         request: IRequest,
-        parser: Parser<Model>,
-        completion: @escaping ((Result<Model, NetworkError>) -> Void)
-    ) where Model: Codable
+        parser: Parser<Model>
+    ) async throws -> Model
 }
 
 final class NetworkService: NetworkProtocol {
     
-    func executeWithCodable<Model>(
+    func executeWithCodable<Model: Codable>(
         request: IRequest,
-        parser: Parser<Model>,
-        completion: @escaping (Result<Model, NetworkError>) -> Void
-    ) {
+        parser: Parser<Model>
+    ) async throws -> Model {
         
         let url = URL(string: NetworkConstants.baseURL + request.path)!
         let method: HTTPMethod = request.method
         let parameters: [String: Any] = request.parameters
         let headers: HTTPHeaders = HTTPHeaders(request.headers)
         
-        AF.request(
-            url,
-            method: method,
-            parameters: parameters,
-            headers: headers
-        )
-        .validate(statusCode: 200...299)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let result):
-                let parsingResult: Result<Model, NetworkError> = parser.parse(result: result)
-                completion(parsingResult)
-            case .failure(let error):
-                let error: NetworkError = self.handleError(from: error, data: response.data, statusCode: response.response?.statusCode)
-                completion(.failure(error))
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(
+                url,
+                method: method,
+                parameters: parameters,
+                headers: headers
+            )
+            .validate(statusCode: 200...299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let result):
+                    let parsingResult: Result<Model, NetworkError> = parser.parse(result: result)
+                    
+                    switch parsingResult {
+                    case .success(let model):
+                        continuation.resume(returning: model)
+                    case .failure(let parserError):
+                        continuation.resume(throwing: parserError)
+                    }
+                    
+                case .failure(let error):
+                    let networkError: NetworkError = self.handleError(from: error, data: response.data, statusCode: response.response?.statusCode)
+                    continuation.resume(throwing: networkError)
+                }
             }
         }
     }

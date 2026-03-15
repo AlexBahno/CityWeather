@@ -13,6 +13,7 @@ struct CityDetailsRouter {
 
 final class CityDetailsViewModel: ObservableObject {
     
+    // properties
     let city: City
     let router: CityDetailsRouter
     private let favouritesService: FavoritesServiceProtocol
@@ -23,6 +24,7 @@ final class CityDetailsViewModel: ObservableObject {
         return "Погода в \(city.name): \(Int(city.main.temp))°C, \(city.primaryWeather.uppercasedDescription)"
     }
     
+    // MARK: - init
     init(
         city: City,
         favouritesService: FavoritesServiceProtocol,
@@ -35,6 +37,7 @@ final class CityDetailsViewModel: ObservableObject {
         self.isFavourite = favouritesService.isFavorite(city: city.name)
     }
     
+    // saving or deleting city from saved
     func handleSavedButtonAction() {
         if favouritesService.isFavorite(city: city.name) {
             favouritesService.removeFavorite(city: city.name)

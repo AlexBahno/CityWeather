@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct WeatherInfoCard: View {
+    
     let title: String
     let value: String
     let icon: String
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 8.flexible()) {
             Image(systemName: icon)
                 .font(.title2)
                 .foregroundColor(.blue)
@@ -25,7 +26,7 @@ struct WeatherInfoCard: View {
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding()
+        .padding(8.flexible())
         .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(16.flexible())
     }

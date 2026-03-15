@@ -14,6 +14,7 @@ class CitiesListViewFactory: ObservableObject {
     
     private let coordinator: CitiesListCoordinator
     
+    // MARK: - init
     init(coordinator: CitiesListCoordinator) {
         self.coordinator = coordinator
     }

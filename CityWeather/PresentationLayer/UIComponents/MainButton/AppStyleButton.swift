@@ -8,6 +8,7 @@
 import SwiftUI
 
 enum AppStyleType {
+    
     case withWhiteBackground
     case withGreenBackground
 }

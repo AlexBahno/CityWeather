@@ -24,7 +24,6 @@ struct CityDetailsView: View {
     
     var content: some View {
         VStack(spacing: 24.flexible()) {
-            
             header
             
             mainInfo

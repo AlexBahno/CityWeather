@@ -99,16 +99,11 @@ extension SavedCitiesViewModel {
     
     // Fetch single city from api
     private func fetchSingleCityAsync(request: Request) async throws -> City {
-        try await withCheckedThrowingContinuation { continuation in
-            networkService.executeWithCodable(request: request, parser: Parser<City>()) { result in
-                switch result {
-                case .success(let city):
-                    continuation.resume(returning: city)
-                case .failure(let error):
-                    self.error = error
-                    continuation.resume(throwing: error)
-                }
-            }
+        do {
+            return try await networkService.executeWithCodable(request: request, parser: Parser<City>())
+        } catch {
+            self.error = error as? NetworkError
+            throw error
         }
     }
 }

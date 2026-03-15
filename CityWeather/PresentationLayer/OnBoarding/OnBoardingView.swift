@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    
     @ObservedObject var appCoordinator: AppCoordinator
     @State private var onBoardingStep: OnBoardingSteps = .welcome
     
@@ -33,10 +34,10 @@ struct OnboardingView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .disabled(true)
-                        
+            
             StepIndicator(currentStep: $onBoardingStep)
                 .padding(.bottom, 56.flexible())
-                        
+            
             nextButton
             
             Spacer()

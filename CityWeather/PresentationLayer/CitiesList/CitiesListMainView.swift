@@ -75,7 +75,7 @@ struct CitiesListMainView: View {
         List(viewModel.searchResults) { city in
             CityCellView(
                 city: city,
-                isSaved: viewModel.favouritesService.isFavorite(city: city.name)
+                isSaved: viewModel.isCitySaved(cityName: city.name)
             ) {
                 viewModel.handleSavedButtonAction(cityName: city.name)
             }

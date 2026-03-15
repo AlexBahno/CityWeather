@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ShimmerViewModifier: ViewModifier {
+    
     let speed: Double
     let color: Color
     let angle: Double

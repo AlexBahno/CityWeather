@@ -13,6 +13,7 @@ struct SavedCitiesContentView: View {
     @ObservedObject var coordinator: SavedCitiesCoordinator
     @StateObject var factory: SavedCitiesViewFactory
     
+    // MARK: - init
     init(coordinator: SavedCitiesCoordinator) {
         self.coordinator = coordinator
         self._factory = .init(wrappedValue: .init(coordinator: coordinator))

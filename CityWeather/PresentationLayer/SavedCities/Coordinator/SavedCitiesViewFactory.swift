@@ -14,6 +14,7 @@ final class SavedCitiesViewFactory: ObservableObject {
     
     private let coordinator: SavedCitiesCoordinator
     
+    // MARK: - init
     init(coordinator: SavedCitiesCoordinator) {
         self.coordinator = coordinator
     }

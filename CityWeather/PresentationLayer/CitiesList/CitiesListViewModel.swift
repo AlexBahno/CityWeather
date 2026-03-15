@@ -16,15 +16,15 @@ struct CitiesListRouter {
 final class CitiesListViewModel: ObservableObject {
     
     // properties
-    let networkService: NetworkProtocol
-    let favouritesService: FavoritesServiceProtocol
     let router: CitiesListRouter
+    private let networkService: NetworkProtocol
+    private let favouritesService: FavoritesServiceProtocol
+    
+    @Published var searchText = ""
+    @Published var favouriteCityNames: Set<String> = []
     @Published private(set) var state = ViewState.idle
     @Published private(set) var error: NetworkError?
     @Published private(set) var cities: [City] = []
-    @Published var searchText = ""
-    
-    @Published var favouriteCityNames: Set<String> = []
     
     private let defaultCities: [String] = [
         "Kyiv", "Lviv", "Odesa", "Kharkiv", "Dnipro", "Uzhhorod", "Zaporizhzhia", "Vinnytsia"
@@ -70,10 +70,15 @@ final class CitiesListViewModel: ObservableObject {
         let saved = favouritesService.getFavoriteCities()
         self.favouriteCityNames = Set(saved.map { $0 })
     }
+    
+    func isCitySaved(cityName: String) -> Bool {
+        favouritesService.isFavorite(city: cityName)
+    }
 }
 
 // MARK: - Network
 extension CitiesListViewModel {
+    
     // Fetching defaultCities
     @MainActor
     func fetchData() async {
@@ -117,16 +122,11 @@ extension CitiesListViewModel {
     
     // Fetch single city from api
     private func fetchSingleCityAsync(request: Request) async throws -> City {
-        try await withCheckedThrowingContinuation { continuation in
-            networkService.executeWithCodable(request: request, parser: Parser<City>()) { result in
-                switch result {
-                case .success(let city):
-                    continuation.resume(returning: city)
-                case .failure(let error):
-                    self.error = error
-                    continuation.resume(throwing: error)
-                }
-            }
+        do {
+            return try await networkService.executeWithCodable(request: request, parser: Parser<City>())
+        } catch {
+            self.error = error as? NetworkError
+            throw error
         }
     }
 }

@@ -11,11 +11,12 @@ import SwiftUI
 /// Coordinator for Cities List Flow
 final class CitiesListCoordinator: BaseCoordinator {
     
+    let services: Services
+    
     @Published var presentSheetItem: CitiesListDestinationFlowPage?
     @Published var fullCoverItem: CitiesListDestinationFlowPage?
     
-    let services: Services
-    
+    // MARK: - init
     init(services: Services) {
         self.services = services
     }
