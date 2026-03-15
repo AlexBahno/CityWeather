@@ -24,20 +24,20 @@ enum OnBoardingSteps: Int, CaseIterable, Identifiable {
     
     var title: String {
         switch self {
-        case .welcome: "Welcome to\nCityWeather"
-        case .checkWeather: "Live Weather\nat a Glance"
-        case .searchForCity: "Explore Any\nCity on Earth"
+        case .welcome: "Вітаємо у\nCityWeather"
+        case .checkWeather: "Актуальна погода\nз першого погляду"
+        case .searchForCity: "Досліджуй будь-яке\nмісто на Землі"
         }
     }
     
     var description: String {
         switch self {
         case .welcome:
-            "Your personal window to the sky. Accurate, beautiful, and always up to date — wherever you are"
+            "Твоє особисте вікно у небо. Точний, красивий та завжди актуальний прогноз — де б ти не був."
         case .checkWeather:
-            "See real-time temperature, humidity, wind speed, and forecasts for any city — all in one beautiful view"
+            "Дізнавайся температуру в реальному часі, вологість, швидкість вітру та прогноз для будь-якого міста — усе на одному зручному екрані."
         case .searchForCity:
-            "Search thousands of cities instantly. Save your favourites and switch between them with a single tap."
+            "Миттєво шукай серед тисяч міст. Зберігай улюблені та перемикайся між ними в один дотик."
         }
     }
     

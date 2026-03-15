@@ -17,13 +17,13 @@ struct MainTabCoordinatorView: View {
             
             CitiesListContentView(coordinator: tabCoordinator.citiesCoordinator)
                 .tabItem {
-                    Label("Cities", systemImage: "list.bullet")
+                    Label("Список міст", systemImage: "list.bullet")
                 }
                 .tag(TabCoordinator.Tab.citiesList)
             
             SavedCitiesContentView(coordinator: tabCoordinator.savedCitiesCoordnitaor)
             .tabItem {
-                Label("Saved", systemImage: "star.fill")
+                Label("Збережені", systemImage: "star.fill")
             }
             .tag(TabCoordinator.Tab.savedCities)
         }

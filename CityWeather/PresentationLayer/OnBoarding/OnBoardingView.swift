@@ -74,7 +74,7 @@ struct OnboardingView: View {
     var nextButton: some View {
         VStack(spacing: 8.flexible()) {
             AppStyleButton(
-                text: onBoardingStep == .searchForCity ? "Start" : "Next",
+                text: onBoardingStep == .searchForCity ? "Почати" : "Наступне",
                 type: .withGreenBackground
             ) {
                 if let nextStep = onBoardingStep.nextStep {
